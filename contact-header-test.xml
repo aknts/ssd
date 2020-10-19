@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<scenario name="Server UAS">
+
+<recv request="INVITE">
+  <action>
+    <ereg regexp="(<sip:)(.*)(@.*)" search_in="hdr" header="To:" assign_to="3,4,5,6"/>
+    <log message="From is [$3]. Tech is [$4]. Number is [$5]. Destination is [$6]."/>
+  </action>
+</recv>
+
+<send>
+<![CDATA[
+SIP/2.0 100 trying -- your call is important to us
+[last_Via:]
+[last_From:]
+[last_To:];tag=[call_number]
+[last_Call-ID:]
+[last_CSeq:]
+Server: SIPP
+Content-Length: 0
+]]>
+</send>
+
+<send>
+<![CDATA[
+SIP/2.0 183 Session Progress
+[last_Via:]
+Record-Route: <sip:192.168.1.162;lr>
+[last_From:]
+[last_To:];tag=[call_number]
+[last_Call-ID:]
+[last_CSeq:]
+Contact: <sip:[$5]@192.168.1.182:5060;transport=udp>
+User-Agent: ADC-1.0.7
+Accept: application/sdp
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, INFO, REGISTER, REFER, NOTIFY
+Supported: timer, path, replaces
+Allow-Events: talk, hold, conference, refer
+Content-Type: application/sdp
+Content-Disposition: session
+Content-Length: 0
+]]>
+</send>
+
+
+<recv request="CANCEL">
+</recv>
+
+</scenario>

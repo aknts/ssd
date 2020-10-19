@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<scenario name="Server UAS">
+
+<recv request="INVITE">
+  <action>
+    <ereg regexp="(<sip:)(.*)(@.*)" search_in="hdr" header="To:" assign_to="3,4,5,6"/>
+    <log message="From is [$3]. Tech is [$4]. Number is [$5]. Destination is [$6]."/>
+  </action>
+</recv>
+
+
+<send>
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: <sip:[local_ip]:[local_port];transport=[transport]>
+  Content-Length: [len]
+
+  v=0
+  o=user1 53655765 2353687637 IN IP[local_ip_type] [local_ip]
+  s=-
+  c=IN IP[media_ip_type] [media_ip]
+  t=0 0
+m=audio 7345 RTP/AVP 8 3 0 101
+a=rtpmap:8 PCMA/8000
+a=rtpmap:3 GSM/8000
+a=rtpmap:0 PCMU/8000
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-16
+a=ptime:20
+a=sendrecv
+    ]]>
+</send>
+
+<send>
+<![CDATA[
+INVITE sip:2109876543@192.168.1.162 SIP/2.0
+[last_Via:]
+[last_From:]
+[last_To:]
+[last_Call-ID:]
+[last_CSeq:]
+Contact: <sip:2109876543@192.168.1.199:5060>
+Supported: timer,replaces,sdp-anat
+Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY, INFO, PUBLISH, MESSAGE
+User-Agent: Mediant SW/v.7.20A.158.012
+[last_Date]
+Content-Type: application/sdp
+  Content-Length: [len]
+
+  v=0
+  o=user1 53655765 2353687637 IN IP[local_ip_type] [local_ip]
+  s=-
+  c=IN IP[media_ip_type] [media_ip]
+  t=0 0
+m=audio 7345 RTP/AVP 8 3 0 101
+a=rtpmap:8 PCMA/8000
+a=rtpmap:3 GSM/8000
+a=rtpmap:0 PCMU/8000
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-16
+a=ptime:20
+a=sendrecv
+
+]]>
+</send>
+
+<recv request="CANCEL">
+</recv>
+
+</scenario>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<scenario name="Server UAS">
+
+<recv request="SUBSCRIBE">
+</recv>
+
+<send>
+<![CDATA[
+NOTIFY [last_contact] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port]
+Max-Forwards: 70
+Contact: <sip:[local_ip]:[local_port]>
+To: <sip:[local_ip]:[local_port]>
+From: <sip:[local_ip]:[local_port]>;tag=[call_number]
+[last_Call-ID:]
+[last_CSeq:]
+Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REGISTER, SUBSCRIBE, NOTIFY, REFER, INFO, MESSAGE
+Content-Type: application/url
+Supported: replaces
+User-Agent: sipp-pnp
+Event: ua-profile
+Content-Length: [len]
+Message Body:
+http://192.168.1.9/provisioning/cfg000B82273B89
+]]>
+</send>
+</scenario>
